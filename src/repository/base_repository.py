@@ -23,7 +23,7 @@ class BaseRepository(metaclass=abc.ABCMeta):
 
     def read_sql(self, sql):
         # TODO あとで消す
-        print(sql)
+        # print(sql)
         return pd.read_sql(sql=sql, con=self.engine)
 
     @staticmethod
