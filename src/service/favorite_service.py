@@ -23,8 +23,8 @@ class FavoriteService(HorseRacingService):
                          payoff_repository=payoff_repository,
                          conditions=conditions,
                          conditions_string=conditions_string)
-        self.favorite = f"{favorite:02d}"
-        self.statictics: Optional[Statistics] = None
+        self.favorite: str = f"{favorite:02d}"
+        self.statistics: Optional[Statistics] = None
 
         self.all_favorite_horses: Dict[str: Series] = {}
         self.set_favorite_horses()
@@ -37,7 +37,7 @@ class FavoriteService(HorseRacingService):
                     self.all_favorite_horses[race_id] = entry_horse
 
     def set_statistics(self):
-# TODO HorseRacingService.initialize をオーバーライドして、統計を出したほうがパフォーマンスがいい（self.races を2回回してるため）
+        # TODO HorseRacingService.initialize をオーバーライドして、統計を出したほうがパフォーマンスがいい（self.races を2回回してるため）
         finishing_position_statistics = [0] * 4
         horses_num = len(self.all_favorite_horses)
         sum_win = 0    # 的中単勝合計
@@ -98,7 +98,7 @@ class FavoriteService(HorseRacingService):
         # 複勝的中率と回収率
         return_rate_place = utils.math.division_and_round(sum_place, horses_num * 100)
 
-        self.statictics = Statistics(total_arrivals=horses_num,
+        self.statistics = Statistics(total_arrivals=horses_num,
                                      finishing_position_statistics=finishing_position_statistics,
                                      hitting_rate_win=hitting_rate_win,
                                      hitting_rate_place=hitting_rate_place,
@@ -150,6 +150,6 @@ if __name__ == '__main__':
         # for race_id, entry_horse in service.all_favorite_horses.items():
         #     print(service.to_summary_text(race_id, entry_horse))
         #
-        print(service.statictics)
+        print(f"{service.favorite}人気: {service.statistics}")
 
     main()
