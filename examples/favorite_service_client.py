@@ -89,18 +89,19 @@ def get_favorite_rate_tokyo_and_sapporo():
     # }
     race_courses = list(favorite_services.keys())
     column_names = ["人気"] + race_courses
-    return_rate_wins = []
-    for service in favorite_services.values():
-        return_rate_wins.append(service.statistics.return_rate_win)
+    data = {
+        "人気": [1]
+    }
+    for race_course, service in favorite_services.items():
+        data[race_course] = [service.statistics.return_rate_win]
 
-    data = [1] + return_rate_wins
-    df = pd.DataFrame([data], columns=column_names)
+    df = pd.DataFrame(data=data, columns=column_names)
     print(df)
 
 
 def get_favorite_rate_tokyo_and_sapporo_1to3():
     """
-    5 年間の東京競馬場と札幌競馬場の 1 番人気のデータ集計
+    1 年間の東京競馬場と札幌競馬場の 1 ~ 3 番人気のデータ集計
     """
 
     conditions_tokyo = {
@@ -109,7 +110,7 @@ def get_favorite_rate_tokyo_and_sapporo_1to3():
     conditions_sapporo = {
         "keibajo_code": "01",
     }
-    conditions_string = "kaisai_nen >= '2015' AND kaisai_nen < '2020' AND track_code < '30'"
+    conditions_string = "kaisai_nen >= '2019' AND kaisai_nen < '2020' AND track_code < '30'"
     race_repository = RaceRepository()
     entry_horses_repository = EntryHorsesRepository()
     payoff_repository = PayoffRepository()
@@ -154,15 +155,15 @@ def get_favorite_rate_tokyo_and_sapporo_1to3():
             return_rate_wins.append(service.statistics.return_rate_win)
         # 例) "札幌": ["1番人気回収率", "2番人気回収率", "3番人気回収率"]
         data[race_cource] = return_rate_wins
-    df = pd.DataFrame([data], columns=column_names)
+    df = pd.DataFrame(data, columns=column_names)
     print(df)
 
 
 def main():
     # get_favorite_rate()
     # get_top_10_years_rate()
-    # get_favorite_rate_tokyo_and_sapporo()
-    get_favorite_rate_tokyo_and_sapporo_1to3()
+    get_favorite_rate_tokyo_and_sapporo()
+    # get_favorite_rate_tokyo_and_sapporo_1to3()
 
 
 if __name__ == '__main__':
