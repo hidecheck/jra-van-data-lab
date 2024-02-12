@@ -1,5 +1,6 @@
 import utils
 from repository.entry_horses_repository import EntryHorsesRepository
+from repository.payoff_repository import PayoffRepository
 from repository.race_repository import RaceRepository
 from service.favorite_service import FavoriteService
 from service.horse_racing_service import HorseRacingService
@@ -17,9 +18,11 @@ class TestFavoriteService:
     def setup_method(self):
         race_repository = RaceRepository()
         entry_horses_repository = EntryHorsesRepository()
+        payoff_repository = PayoffRepository()
 
         self.service = FavoriteService(race_repository=race_repository,
                                        entry_horses_repository=entry_horses_repository,
+                                       payoff_repository=payoff_repository,
                                        conditions=CONDITIONS,
                                        favorite=1
                                        )
