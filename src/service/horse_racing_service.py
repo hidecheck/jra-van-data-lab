@@ -34,6 +34,7 @@ class HorseRacingService:
         for i, race in self.races.iterrows():
             race_id = self.to_race_id(race)
             self.races.at[i, 'race_id'] = race_id
+            # TODO 出走馬情報をレース毎でとらずに一括取得する
             # 出走馬情報
             entry_horses = self.entry_horses_repository.find_by_race(race=race)
             self.all_entry_horses[race_id] = entry_horses
