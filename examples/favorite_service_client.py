@@ -9,7 +9,7 @@ from service.favorite_service import FavoriteService
 def get_favorite_rate():
     conditions_string = None
 
-    # # 障害レースなしの日
+    # 障害レースなしの日
     conditions = {
         "kaisai_nen": "2019",
         "kaisai_tsukihi": "0126",
@@ -162,8 +162,8 @@ def get_favorite_rate_tokyo_and_sapporo_1to3():
 def main():
     # get_favorite_rate()
     # get_top_10_years_rate()
-    get_favorite_rate_tokyo_and_sapporo()
-    # get_favorite_rate_tokyo_and_sapporo_1to3()
+    # get_favorite_rate_tokyo_and_sapporo()
+    get_favorite_rate_tokyo_and_sapporo_1to3()
 
 
 if __name__ == '__main__':

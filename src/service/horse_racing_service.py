@@ -31,10 +31,11 @@ class HorseRacingService:
         else:
             self.races = self.race_repository.find_with_conditions_string(conditions, conditions_string, order, desc)
 
+        print(f"## 総レース件数: {len(self.races)}")
         for i, race in self.races.iterrows():
             race_id = self.to_race_id(race)
             self.races.at[i, 'race_id'] = race_id
-            # TODO 出走馬情報をレース毎でとらずに一括取得する
+            # TODO 馬毎情報（出走馬情報）をレース毎でとらずに一括取得する
             # 出走馬情報
             entry_horses = self.entry_horses_repository.find_by_race(race=race)
             self.all_entry_horses[race_id] = entry_horses
