@@ -1,6 +1,5 @@
 import utils.output
 from repository.entry_horses_repository import EntryHorsesRepository
-from repository.race_repository import RaceRepository
 from service.entry_horses_service import EntryHorsesService
 
 CONDITIONS = {
