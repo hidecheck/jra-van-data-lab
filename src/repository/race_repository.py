@@ -12,26 +12,6 @@ class RaceRepository(BaseRepository):
         super().__init__()
         self.table = const_table_name.RACE
 
-    def find_with_conditions_string(self, conditions: Dict, conditions_string: str, order: Optional[str] = None, desc: bool = False) -> DataFrame:
-        """
-        条件を文字列で指定して検索
-        Parameters
-        ----------
-        conditions
-        order
-        desc
-
-        Returns
-        -------
-
-        """
-        if not conditions_string:
-            return self.find(conditions=conditions, order=order, desc=desc)
-
-        conditions_string_equality = self.create_conditions_string(conditions)
-        sql = f"SELECT * FROM {self.table} WHERE {conditions_string_equality} AND {conditions_string}"
-        return self.read_sql(sql=sql)
-
     @staticmethod
     def to_conditions(series: Series):
         if "kaisai_nen" not in series.index:

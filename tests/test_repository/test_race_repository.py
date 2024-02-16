@@ -21,7 +21,7 @@ class TestBaseRaceDisplay:
         print(len(df))
         output.show_one_line(df, True)
 
-    def test_find_track_code_30(self):
+    def test_find_with_conditions_string(self):
         # 障害レースのみ取得する
         conditions = {
             "kaisai_nen": "2020",
@@ -31,3 +31,40 @@ class TestBaseRaceDisplay:
         df = self.repository.find_with_conditions_string(conditions, conditions_string)
         print(len(df))
         output.show_line(df, 15, True)
+
+    def test_find_with_conditions_string_empty(self):
+        # 障害レースのみ取得する
+        conditions = {
+            "kaisai_nen": "2020",
+            "keibajo_code": "06"
+        }
+        conditions_string = ""
+        df = self.repository.find_with_conditions_string(conditions, conditions_string)
+        print(len(df))
+        output.show_line(df, 15, True)
+
+    def test_find_with_conditions_string_none(self):
+        # 障害レースのみ取得する
+        conditions = {
+            "kaisai_nen": "2020",
+            "keibajo_code": "06"
+        }
+        conditions_string = None
+        df = self.repository.find_with_conditions_string(conditions, conditions_string)
+        print(len(df))
+        output.show_line(df, 15, True)
+
+    def test_find_without_conditions(self):
+        df = self.repository.find()
+        print(len(df))
+        output.show_one_line(df, True)
+
+    def test_find_conditions_empty(self):
+        df = self.repository.find(conditions={})
+        print(len(df))
+        output.show_one_line(df, True)
+
+    def test_find_conditions_none(self):
+        df = self.repository.find(conditions=None)
+        print(len(df))
+        output.show_one_line(df, True)
