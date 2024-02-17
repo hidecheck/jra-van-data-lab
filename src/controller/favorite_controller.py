@@ -76,6 +76,9 @@ class FavoriteController:
         if is_obstacle is False:
             conditions_string = f"kaisai_nen >= '{start_year}' AND kaisai_nen < '{end_year}' AND track_code < '30'"
 
+        if not list_keibajo_code:
+            list_keibajo_code = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"]
+
         # favorite_service コンテナの作成
         #   各競馬場ごとの人気ごとの favorite_service のコンテナ
         #     favorite_services = {
@@ -115,12 +118,12 @@ class FavoriteController:
         data = {
             "人気": list_favorite,
         }
-        for race_cource, list_service in favorite_services.items():
+        for race_course, list_service in favorite_services.items():
             return_rate_wins = []
             for service in list_service:
                 return_rate_wins.append(service.statistics.return_rate_win)
             # 例) "札幌": ["1番人気回収率", "2番人気回収率", "3番人気回収率"]
-            data[race_cource] = return_rate_wins
+            data[race_course] = return_rate_wins
         df = pd.DataFrame(data, columns=column_names)
         return df
 
@@ -135,7 +138,8 @@ if __name__ == '__main__':
         # statistics = controller.get_past_years_rate_win_by_racecourse(keibajo_code=keibajo_code, favorite=favorite, years_ago=years_ago, is_obstacle=is_obstacle)
         # print(statistics)
 
-        list_keibajo_code = ["01", "02"]
+        # list_keibajo_code = ["01", "02"]
+        list_keibajo_code = []
         list_favorite = list(range(1, 4))
         years_ago = 1
         is_obstacle = False

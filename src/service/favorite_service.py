@@ -33,8 +33,11 @@ class FavoriteService(HorseRacingService):
     def set_favorite_horses(self):
         for race_id, entry_horses in self.all_entry_horses.items():
             for index, entry_horse in entry_horses.iterrows():
-                if entry_horse["tansho_ninkijun"] == self.favorite:
+                if entry_horse["tansho_ninkijun"] == "00":
+                    continue
+                elif entry_horse["tansho_ninkijun"] == self.favorite:
                     self.all_favorite_horses[race_id] = entry_horse
+                    continue
 
     def set_statistics(self):
         # TODO HorseRacingService.initialize をオーバーライドして、統計を出したほうがパフォーマンスがいい（self.races を2回回してるため）
