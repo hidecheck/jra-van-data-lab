@@ -9,7 +9,11 @@ from service.favorite_service import FavoriteService
 def get_favorite_rate():
     conditions_string = None
 
+<<<<<<< HEAD
     # 障害レースなしの日
+=======
+    # # 障害レースなしの日
+>>>>>>> origin/main
     conditions = {
         "kaisai_nen": "2019",
         "kaisai_tsukihi": "0126",
