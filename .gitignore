@@ -159,3 +159,4 @@ gomi_src/
 # etc
 except_files/
 z_sample/
+/gomi_sql/
