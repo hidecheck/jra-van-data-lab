@@ -9,9 +9,16 @@ from repository.race_repository import RaceRepository
 
 
 class HorseRacingService:
-    def __init__(self, race_repository: RaceRepository, entry_horses_repository: EntryHorsesRepository,
-                 payoff_repository: PayoffRepository,
-                 conditions: Dict, conditions_string: str = None, order=None, desc=False):
+    def __init__(
+        self,
+        race_repository: RaceRepository,
+        entry_horses_repository: EntryHorsesRepository,
+        payoff_repository: PayoffRepository,
+        conditions: Dict,
+        conditions_string: str = None,
+        order=None,
+        desc=False,
+    ):
         self.race_repository: RaceRepository = race_repository
         self.entry_horses_repository: EntryHorsesRepository = entry_horses_repository
         self.payoff_repository: PayoffRepository = payoff_repository
@@ -19,9 +26,9 @@ class HorseRacingService:
         # 指定した条件にマッチする全レース情報
         self.races: Optional[DataFrame] = None
         # 指定した条件にマッチする全レースの払い戻し情報
-        self.all_payoff: Dict[str: Series] = {}
+        self.all_payoff: Dict[str:Series] = {}
         # 指定した条件にマッチする全レースの全出走馬情報のリスト（障害レースも含まれるため、 self.race よりサイズが大きくなる）
-        self.all_entry_horses: Dict[str: DataFrame] = {}
+        self.all_entry_horses: Dict[str:DataFrame] = {}
 
         self.initialize(conditions, conditions_string, order, desc)
 
@@ -34,7 +41,7 @@ class HorseRacingService:
         print(f"## 総レース件数: {len(self.races)}")
         for i, race in self.races.iterrows():
             race_id = self.to_race_id(race)
-            self.races.at[i, 'race_id'] = race_id
+            self.races.at[i, "race_id"] = race_id
             # TODO 馬毎情報（出走馬情報）をレース毎でとらずに一括取得する
             # 出走馬情報
             entry_horses = self.entry_horses_repository.find_by_race(race=race)
@@ -72,7 +79,8 @@ class HorseRacingService:
         return f"{year}-{month}-{day}_{series['keibajo_code']}_{series['race_bango']}"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     def main():
         conditions = {
             "kaisai_nen": "2020",
@@ -83,9 +91,12 @@ if __name__ == '__main__':
         entry_horses_repository = EntryHorsesRepository()
         payoff_repository = PayoffRepository()
 
-        service = HorseRacingService(race_repository=race_repository, entry_horses_repository=entry_horses_repository,
-                                     payoff_repository=payoff_repository,
-                                     conditions=conditions)
+        service = HorseRacingService(
+            race_repository=race_repository,
+            entry_horses_repository=entry_horses_repository,
+            payoff_repository=payoff_repository,
+            conditions=conditions,
+        )
         print(service.races.head())
         utils.output.show_one_line(service.races, True)
         utils.output.show_line(service.races, 1, True)
