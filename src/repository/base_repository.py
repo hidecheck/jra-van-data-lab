@@ -12,6 +12,7 @@ class BaseRepository(metaclass=abc.ABCMeta):
     def __init__(self):
         self.engine: Optional[Engine] = None
         self.table: Optional[str] = None
+        self.table_nar: Optional[str] = None  # 地方競馬データ
         self._connect()
 
     def _connect(self):
