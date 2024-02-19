@@ -1,4 +1,4 @@
-def show_one_line(df, sort_index=False):
+def show_one_line(df, sort_index=True):
     if sort_index:
         s = df.iloc[0].sort_index()
     else:
@@ -8,7 +8,7 @@ def show_one_line(df, sort_index=False):
         print(i, v)
 
 
-def show_line(df, index=0, sort_index=False):
+def show_line(df, index=0, sort_index=True):
     if sort_index:
         s = df.iloc[index].sort_index()
     else:
@@ -18,7 +18,7 @@ def show_line(df, index=0, sort_index=False):
         print(i, v)
 
 
-def show_series(series, sort_index=False):
+def show_series(series, sort_index=True):
     if sort_index:
         s = series.sort_index()
     else:
