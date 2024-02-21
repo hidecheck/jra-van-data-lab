@@ -1,4 +1,4 @@
-from const import const_table_name
+from const import table_name
 from repository.base_repository import BaseRepository
 from utils import output
 
@@ -6,7 +6,7 @@ from utils import output
 class PayoffRepository(BaseRepository):
     def __init__(self):
         super().__init__()
-        self.table = const_table_name.PAYOFF
+        self.table = table_name.PAYOFF
 
 
 if __name__ == '__main__':

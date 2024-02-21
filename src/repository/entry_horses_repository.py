@@ -4,7 +4,7 @@ import pandas as pd
 from pandas import DataFrame, Series
 
 import utils.output
-from const import const_table_name
+from const import table_name
 from repository.base_repository import BaseRepository
 
 
@@ -13,11 +13,12 @@ DATA_KUBUN_KAKUTEI = 7
 
 class EntryHorsesRepository(BaseRepository):
     """
-    出走馬情報のDB操作クラス
+    馬毎レース情報（出走馬情報）のDB操作クラス
     """
+
     def __init__(self):
         super().__init__()
-        self.table = const_table_name.HORSE_INFO_BY_RACE
+        self.table = table_name.ENTRY_HORSE
 
     def find_by_race(self, race: Series, order: Optional[str] = None, desc: bool = None):
         conditions = {

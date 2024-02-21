@@ -1,5 +1,5 @@
 import utils.output
-from const import const_table_name
+from const import table_name
 from repository.base_repository import BaseRepository
 
 
@@ -18,7 +18,7 @@ class HorseWeightRankRepository(BaseRepository):
 
     def __init__(self):
         super().__init__()
-        self.table = const_table_name.HORSE_WEIGHT_RANK
+        self.table = table_name.HORSE_WEIGHT_RANK
 
     def recreate_table(self):
         pass
