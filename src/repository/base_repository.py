@@ -13,6 +13,7 @@ class BaseRepository(metaclass=abc.ABCMeta):
         self.engine: Optional[Engine] = None
         self.table: Optional[str] = None
         self.table_nar: Optional[str] = None  # 地方競馬データ
+        self.default_projection = "*"
         self._connect()
 
     def _connect(self):
@@ -39,15 +40,14 @@ class BaseRepository(metaclass=abc.ABCMeta):
         # TODO
         pass
 
-    @staticmethod
-    def create_sql_with_table(
+    def create_sql_with_table(self,
         table: str, conditions: Optional[Dict], order: Optional[str] = None, desc: bool = False
     ):
         conditions_string = BaseRepository.create_conditions_string(conditions)
         if not conditions_string:
-            sql = f"SELECT * FROM {table}"
+            sql = f"SELECT {self.default_projection} FROM {table}"
         else:
-            sql = f"SELECT * FROM {table} WHERE {conditions_string}"
+            sql = f"SELECT {self.default_projection} FROM {table} WHERE {conditions_string}"
 
         if order:
             sql += f" ORDER BY {order}"
@@ -95,7 +95,7 @@ class BaseRepository(metaclass=abc.ABCMeta):
         if not conditions_string:
             return self.find(conditions=conditions, order=order, desc=desc)
 
-        sql = f"SELECT * FROM {self.table}"
+        sql = f"SELECT {self.default_projection} FROM {self.table}"
         conditions_string_equality = self.create_conditions_string(conditions)
         if not conditions_string_equality:
             sql += f" WHERE {conditions_string}"

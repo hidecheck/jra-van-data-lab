@@ -1,10 +1,9 @@
-from typing import Dict, Optional
+from typing import Optional
 
-import pandas as pd
-from pandas import DataFrame, Series
+from pandas import Series
 
 import utils.output
-from const import table_name
+from const import table_name, table_columns
 from repository.base_repository import BaseRepository
 
 
@@ -19,6 +18,7 @@ class EntryHorsesRepository(BaseRepository):
     def __init__(self):
         super().__init__()
         self.table = table_name.ENTRY_HORSE
+        self.default_projection = ", ".join(table_columns.ENTRY_HORSE_PROJECTIONS)
 
     def find_by_race(self, race: Series, order: Optional[str] = None, desc: bool = None):
         conditions = {
@@ -34,7 +34,6 @@ class EntryHorsesRepository(BaseRepository):
         return self.find_previous_entry(ketto_toroku_bango=entry_horse["ketto_toroku_bango"],
                                         kaisai_nen=entry_horse["kaisai_nen"],
                                         kaisai_tsukihi = entry_horse["kaisai_tsukihi"])
-
 
     def find_previous_entry(self, ketto_toroku_bango: str, kaisai_nen: str, kaisai_tsukihi: str) -> Optional[Series]:
         """

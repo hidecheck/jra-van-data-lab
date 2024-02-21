@@ -160,3 +160,4 @@ gomi_src/
 except_files/
 z_sample/
 /gomi_sql/
+/src/service/out.csv
