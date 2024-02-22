@@ -22,7 +22,7 @@ ENTRY_HORSE_ALL_COLUMNS = [
     "chokyoshimei_ryakusho",
     "banushi_code",
     "banushimei",
-    "fukushoku_hyoji",    # 除外
+    "fukushoku_hyoji",    # 除外 カンマ区切りの文字含む
     "yobi_1",
     "futan_juryo",
     "futan_juryo_henkomae",
