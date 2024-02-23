@@ -22,4 +22,3 @@ def to_race_course(code):
         return DICT_RACE_COURSE[code]
     else:
         return "なし"
-

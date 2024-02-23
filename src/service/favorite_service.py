@@ -15,18 +15,29 @@ class FavoriteService(HorseRacingService):
     """
     指定した人気馬の馬毎情報を取得する
     """
-    def __init__(self, race_repository: RaceRepository, entry_horses_repository: EntryHorsesRepository,
-                 payoff_repository: PayoffRepository, conditions: Dict, conditions_string: str = None,
-                 favorite: int = 1, order=None, desc=False):
-        super().__init__(race_repository=race_repository,
-                         entry_horses_repository=entry_horses_repository,
-                         payoff_repository=payoff_repository,
-                         conditions=conditions,
-                         conditions_string=conditions_string)
+
+    def __init__(
+        self,
+        race_repository: RaceRepository,
+        entry_horses_repository: EntryHorsesRepository,
+        payoff_repository: PayoffRepository,
+        conditions: Dict,
+        conditions_string: str = None,
+        favorite: int = 1,
+        order=None,
+        desc=False,
+    ):
+        super().__init__(
+            race_repository=race_repository,
+            entry_horses_repository=entry_horses_repository,
+            payoff_repository=payoff_repository,
+            conditions=conditions,
+            conditions_string=conditions_string,
+        )
         self.favorite: str = f"{favorite:02d}"
         self.statistics: Optional[Statistics] = None
 
-        self.all_favorite_horses: Dict[str: Series] = {}
+        self.all_favorite_horses: Dict[str:Series] = {}
         self.set_favorite_horses()
         self.set_statistics()
 
@@ -43,23 +54,23 @@ class FavoriteService(HorseRacingService):
         # TODO HorseRacingService.initialize をオーバーライドして、統計を出したほうがパフォーマンスがいい（self.races を2回回してるため）
         finishing_position_statistics = [0] * 4
         horses_num = len(self.all_favorite_horses)
-        sum_win = 0    # 的中単勝合計
+        sum_win = 0  # 的中単勝合計
         sum_place = 0  # 的中複勝合計
 
         # 着順統計
         for race_id, entry_horse in self.all_favorite_horses.items():
-            chakujun = int(entry_horse['kakutei_chakujun'])
+            chakujun = int(entry_horse["kakutei_chakujun"])
             if chakujun > 3:
                 # 着外
                 finishing_position_statistics[3] += 1
             else:
                 # 3着以内
-                finishing_position_statistics[chakujun-1] += 1
+                finishing_position_statistics[chakujun - 1] += 1
 
                 # 的中複勝合計
                 for i in range(1, 6):
-                    key_haraimodoshi_fukusho_a = f"haraimodoshi_fukusho_{i}a"    # 複勝馬番のキー
-                    key_haraimodoshi_fukusho_b = f"haraimodoshi_fukusho_{i}b"    # 複勝払い戻し金額のキー
+                    key_haraimodoshi_fukusho_a = f"haraimodoshi_fukusho_{i}a"  # 複勝馬番のキー
+                    key_haraimodoshi_fukusho_b = f"haraimodoshi_fukusho_{i}b"  # 複勝払い戻し金額のキー
 
                     if not self.all_payoff[race_id][key_haraimodoshi_fukusho_b].isdigit():
                         # haraimodoshi_fukusho_4b 移行は同着データのためデータが入ってないことがある
@@ -87,7 +98,9 @@ class FavoriteService(HorseRacingService):
 
         # 複勝率（複勝的中率）
         #   計算式: 1着 ~ 3着の合計着数 / 全着数
-        place_count = finishing_position_statistics[0] + finishing_position_statistics[1] + finishing_position_statistics[2]
+        place_count = (
+            finishing_position_statistics[0] + finishing_position_statistics[1] + finishing_position_statistics[2]
+        )
         hitting_rate_place = utils.math.division_and_round(place_count, horses_num)
 
         # 単勝的中率と回収率
@@ -101,14 +114,16 @@ class FavoriteService(HorseRacingService):
         # 複勝的中率と回収率
         return_rate_place = utils.math.division_and_round(sum_place, horses_num * 100)
 
-        self.statistics = Statistics(total_arrivals=horses_num,
-                                     finishing_position_statistics=finishing_position_statistics,
-                                     hitting_rate_win=hitting_rate_win,
-                                     hitting_rate_place=hitting_rate_place,
-                                     return_rate_win=return_rate_win,
-                                     return_rate_place=return_rate_place,
-                                     sum_win=sum_win,
-                                     sum_place=sum_place)
+        self.statistics = Statistics(
+            total_arrivals=horses_num,
+            finishing_position_statistics=finishing_position_statistics,
+            hitting_rate_win=hitting_rate_win,
+            hitting_rate_place=hitting_rate_place,
+            return_rate_win=return_rate_win,
+            return_rate_place=return_rate_place,
+            sum_win=sum_win,
+            sum_place=sum_place,
+        )
 
     def to_summary_text(self, race_id, entry_horse: Series):
         year = race_id[:4]
@@ -117,14 +132,17 @@ class FavoriteService(HorseRacingService):
         racing_venue = race_id[11:13]
         race_no = race_id[14:]
 
-        text = (f"{year}-{month}-{day} 競馬場コード({racing_venue}) {race_no}R: "
-                f"{entry_horse['bamei']} {entry_horse['kakutei_chakujun']}着 "
-                f"{float(entry_horse['tansho_odds']) / 10}倍 ({self.favorite}人気)")
+        text = (
+            f"{year}-{month}-{day} 競馬場コード({racing_venue}) {race_no}R: "
+            f"{entry_horse['bamei']} {entry_horse['kakutei_chakujun']}着 "
+            f"{float(entry_horse['tansho_odds']) / 10}倍 ({self.favorite}人気)"
+        )
 
         return text
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     def main():
         conditions_string = None
         # conditions = {
@@ -147,8 +165,14 @@ if __name__ == '__main__':
         entry_horses_repository = EntryHorsesRepository()
         payoff_repository = PayoffRepository()
 
-        service = FavoriteService(race_repository=race_repository, entry_horses_repository=entry_horses_repository,
-                                  payoff_repository=payoff_repository, conditions=conditions, conditions_string=conditions_string, favorite=1)
+        service = FavoriteService(
+            race_repository=race_repository,
+            entry_horses_repository=entry_horses_repository,
+            payoff_repository=payoff_repository,
+            conditions=conditions,
+            conditions_string=conditions_string,
+            favorite=1,
+        )
 
         # for race_id, entry_horse in service.all_favorite_horses.items():
         #     print(service.to_summary_text(race_id, entry_horse))

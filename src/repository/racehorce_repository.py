@@ -1,6 +1,6 @@
 from sqlalchemy import text
 
-from const import const_table_name
+from const import table_name
 from repository.base_repository import BaseRepository
 from utils import output
 
@@ -11,7 +11,7 @@ class RacehorseRepository(BaseRepository):
     """
     def __init__(self):
         super().__init__()
-        self.table = const_table_name.RACEHORSE
+        self.table = table_name.RACEHORSE
 
     def find_by_bamei(self, bamei):
         sql = f"SELECT * FROM {self.table} WHERE bamei LIKE '{bamei}%'"

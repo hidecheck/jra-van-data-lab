@@ -2,7 +2,7 @@ from typing import Dict, Optional
 
 from pandas import DataFrame, Series
 
-from const import const_table_name
+from const import table_name
 from repository.base_repository import BaseRepository
 from utils import output
 
@@ -10,7 +10,7 @@ from utils import output
 class RaceRepository(BaseRepository):
     def __init__(self):
         super().__init__()
-        self.table = const_table_name.RACE
+        self.table = table_name.RACE
 
     @staticmethod
     def to_conditions(series: Series):
