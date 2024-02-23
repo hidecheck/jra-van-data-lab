@@ -10,9 +10,9 @@ conditions = {
 }
 
 
-class TestPayoffRepository:
+class TestCustomEntryHorsesRepository:
     def setup_method(self):
-        self.repository = PayoffRepository()
+        self.repository = CustomEntryHorsesRepository()
 
     def teardown_method(self):
         pass
