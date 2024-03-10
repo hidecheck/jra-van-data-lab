@@ -9,6 +9,12 @@ from utils import query
 
 
 class CustomEntryHorseService:
+    """
+    デフォルトの馬毎データをカスタマイズする
+    追加要素:
+      - レース馬体重のランキング
+      - 前走上がり3ハロンランキング
+    """
     def __init__(
         self,
         custon_horse_entry_repository: CustomEntryHorsesRepository,
@@ -56,15 +62,24 @@ class CustomEntryHorseService:
         # 馬体重ランキング列 昇順・降順 の追加
         group_cols = ["kaisai_nen", "kaisai_tsukihi", "keibajo_code", "race_bango"]
         grouped = df.groupby(group_cols)
-        rank_asc = grouped['bataiju'].rank(method='min').astype(int)
-        rank_asc.name = 'rank_asc'
-        rank_desc = grouped['bataiju'].rank(ascending=False, method='min').astype(int)
-        rank_desc.name = 'rank_desc'
-        self.df_custom_entry_horses = df.join([rank_asc, rank_desc])
+        rank_bataiju_asc = grouped['bataiju'].rank(method='min').astype(int)
+        rank_bataiju_asc.name = 'rank_bataiju_asc'
+        rank_bataiju_desc = grouped['bataiju'].rank(ascending=False, method='min').astype(int)
+        rank_bataiju_desc.name = 'rank_bataiju_desc'
 
         # TODO 上がり 3 ハロンランキング
+        df = df[
+            (df["kohan_3f"] > '000')
+            & (df["kohan_3f"] < '999')
+        ]
+        # 上がり 3 ハロンランキング列 昇順・降順 の追加
+        grouped = df.groupby(group_cols)
+        rank_kohan_3f_asc = grouped['kohan_3f'].rank(method='min').astype(int)
+        rank_kohan_3f_asc.name = 'rank_kohan_3f_asc'
+        rank_kohan_3f_desc = grouped['kohan_3f'].rank(ascending=False, method='min').astype(int)
+        rank_kohan_3f_desc.name = 'rank_kohan_3f_desc'
 
-
+        self.df_custom_entry_horses = df.join([rank_bataiju_asc, rank_bataiju_desc, rank_kohan_3f_asc, rank_kohan_3f_desc])
         # テーブル作成
         self.custom_horse_entry_repository.replace_table(self.df_custom_entry_horses)
 
@@ -75,15 +90,15 @@ if __name__ == "__main__":
         conditions_string = None
         conditions = None
 
-        start_year = 2019
-        end_year = 2020
-        conditions_string = f"kaisai_nen >= '{start_year}' AND kaisai_nen <= '{end_year}'"
-        # conditions = {
-        #     "kaisai_nen": "2020",
-        #     "kaisai_tsukihi": "0725",
-        #     "keibajo_code": "01",
-        #     # "race_bango": "01"
-        # }
+        # start_year = 2019
+        # end_year = 2020
+        # conditions_string = f"kaisai_nen >= '{start_year}' AND kaisai_nen <= '{end_year}'"
+        conditions = {
+            "kaisai_nen": "2020",
+            "kaisai_tsukihi": "0725",
+            "keibajo_code": "01",
+            "race_bango": "01"
+        }
 
         custom_entry_horse_repository = CustomEntryHorsesRepository()
         entry_horses_repository = EntryHorsesRepository()
