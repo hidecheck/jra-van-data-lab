@@ -81,7 +81,7 @@ class CustomEntryHorseService:
 
         self.df_custom_entry_horses = df.join([rank_bataiju_asc, rank_bataiju_desc, rank_kohan_3f_asc, rank_kohan_3f_desc])
         # テーブル作成
-        self.custom_horse_entry_repository.replace_table(self.df_custom_entry_horses)
+        self.custom_horse_entry_repository.create_or_replace_table(self.df_custom_entry_horses)
 
 
 if __name__ == "__main__":

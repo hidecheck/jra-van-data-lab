@@ -11,7 +11,7 @@ class CustomEntryHorsesRepository(BaseRepository):
         super().__init__()
         self.table = table_name.CUSTOM_ENTRY_HORSE
 
-    def replace_table(self, df: DataFrame):
+    def create_or_replace_table(self, df: DataFrame):
         df.to_sql(name=self.table, con=self.engine, if_exists="replace", index=False)
 
     def append(self, df: DataFrame):
