@@ -24,6 +24,12 @@
     - 000: 初期値
     - ※ 過去分のデータは後4ハロンが設定されているものもある(その場合は後3ハロンが初期値
 
+## ZI データ
+- CSV の取得方法: http://target.a.la9.jp/download/downloadzi.htm
+- CSV のフォーマット
+  - ファイル名: ZIYYmmDD.CSV ex) ZI240310.CSV
+  - フォーマット: レースID, ZI指数01, ZI指数02, ...
+  - レースID: <競馬場コード><YY年><N回><N日><レース番号> 
+    - ex) 2024年 中山第2回6日目1レースの場合 `06242601`
 ## コラム
-- [データマイニング予測の仕組み
-](https://jra-van.jp/fun/dm/mining.html)
+- [データマイニング予測の仕組み](https://jra-van.jp/fun/dm/mining.html)
