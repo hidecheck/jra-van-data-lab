@@ -19,7 +19,7 @@ class ZIService:
     #          15: np.int64, 16: np.int64, 17: np.int64, 18: np.int64}
     MAX_CSV_COLUMN = 19
     MIN_YEAR = "54"   # JRA_VAN の最古のデータは1954年
-    DUMP_COLUMNS = ["kaisai_nen", "keibajo_code", "kaisai_kai", "kaisai_nichime", "race_bango", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18"]
+    DUMP_COLUMNS = ["kaisai_nen", "keibajo_code", "kaisai_kai", "kaisai_nichime", "race_bango", "race_id", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18"]
 
     def __init__(self, zi_data_folder: str, repository: ZIRepository):
         self.repository = repository
@@ -56,8 +56,8 @@ class ZIService:
         self.df_zi_data["kaisai_nichime"] = "0" + self.df_zi_data["race_id"].str[5:6]
         # レース番号
         self.df_zi_data["race_bango"] = self.df_zi_data["race_id"].str[6:8]
-        # race_id を削除
-        self.df_zi_data.drop(columns=["race_id"], inplace=True)
+        # # race_id を削除
+        # self.df_zi_data.drop(columns=["race_id"], inplace=True)
 
     def recreate_table(self):
         df_dump_data = self.df_zi_data[self.DUMP_COLUMNS]
