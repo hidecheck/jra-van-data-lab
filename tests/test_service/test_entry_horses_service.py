@@ -37,6 +37,3 @@ class TestEntryHorsesService:
         entry_horse = df.iloc[0].copy()
         interval = self.service.get_race_interval(entry_horse)
         print(f"{interval}（中{self.service.to_interval_week(interval)}週）")
-
-    def test_get_3_furlongs_up(self):
-        self.service.get_3_furlongs_up()
