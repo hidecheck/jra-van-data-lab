@@ -18,6 +18,19 @@ class TestEntryHorsesService:
     def teardown_method(self):
         pass
 
+    def test_init_with_conditions_string(self):
+        conditions = {
+            "kaisai_nen": "2019",
+            "kaisai_tsukihi": "1222",
+            "keibajo_code": "06",
+        }
+        conditions_string = "race_bango > '10'"
+
+        repository = EntryHorsesRepository()
+        self.service = EntryHorsesService(repository, conditions=conditions, conditions_string=conditions_string)
+        for index, row in self.service.entry_horses.iterrows():
+            print(row["race_bango"], row["umaban"], row["bamei"], row["bataiju"], row["tansho_ninkijun"], row["tansho_odds"])
+
     def test_get_entry_horse(self):
         df = self.service.entry_horses
         s = df.iloc[0]

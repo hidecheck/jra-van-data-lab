@@ -75,11 +75,14 @@ if __name__ == '__main__':
             "kaisai_nen": "2019",
             "kaisai_tsukihi": "1222",
             "keibajo_code": "06",
-            "race_bango": "11"
+            # "race_bango": "11"
         }
+        conditions_string = "race_bango > '10'"
 
         repository = EntryHorsesRepository()
-        df = repository.find(conditions=conditions)
+        df = repository.find_with_conditions_string(conditions=conditions, conditions_string=conditions_string)
         utils.output.show_one_line(df)
+        for index, row in df.iterrows():
+            print(row["race_bango"], row["umaban"], row["bamei"], row["bataiju"], row["tansho_ninkijun"], row["tansho_odds"])
 
     main()

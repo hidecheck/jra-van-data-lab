@@ -11,15 +11,27 @@ class EntryHorsesService:
     指定したレースの出走馬情報を操作する
     """
 
-    def __init__(self, repository: EntryHorsesRepository, conditions):
+    def __init__(
+            self,
+            repository: EntryHorsesRepository,
+            conditions: Optional[Dict] = None,
+            conditions_string: str = None,
+            order=None,
+            desc=False,
+    ):
         # レースの全ての出走馬情報
         self.entry_horses: Optional[DataFrame] = None
 
         self.repository: EntryHorsesRepository = repository
-        self.set_entry_horses(conditions=conditions)
+        self.set_entry_horses(conditions=conditions, conditions_string=conditions_string)
 
-    def set_entry_horses(self, conditions):
-        self.entry_horses = self.repository.find(conditions=conditions)
+    def set_entry_horses(self, conditions, conditions_string):
+        if conditions_string:
+            self.entry_horses = self.repository.find_with_conditions_string(
+                conditions=conditions,
+                conditions_string=conditions_string)
+        else:
+            self.entry_horses = self.repository.find(conditions=conditions)
 
     def get_entry_horse_by_ketto_toroku_bango(self, ketto_toroku_bango: str) -> Series:
 
