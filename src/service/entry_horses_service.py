@@ -13,7 +13,7 @@ class EntryHorsesService:
 
     def __init__(
             self,
-            repository: EntryHorsesRepository,
+            repository: Optional[EntryHorsesRepository] = None,
             conditions: Optional[Dict] = None,
             conditions_string: str = None,
             order=None,
@@ -21,8 +21,10 @@ class EntryHorsesService:
     ):
         # レースの全ての出走馬情報
         self.entry_horses: Optional[DataFrame] = None
-
-        self.repository: EntryHorsesRepository = repository
+        if repository:
+            self.repository: EntryHorsesRepository = repository
+        else:
+            self.repository: EntryHorsesRepository = EntryHorsesRepository()
         self.set_entry_horses(conditions=conditions, conditions_string=conditions_string)
 
     def set_entry_horses(self, conditions, conditions_string):
