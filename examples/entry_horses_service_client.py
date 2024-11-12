@@ -5,14 +5,10 @@ from repository.entry_horses_repository import EntryHorsesRepository
 from service.entry_horses_service import EntryHorsesService
 
 
-def create_csv(file_name):
-    conditions = {
-        "kaisai_nen": "2019",
-        "kaisai_tsukihi": "1222",
-        "keibajo_code": "06",
-    }
-    conditions_string = "race_bango > '10'"
-    service = EntryHorsesService(conditions=conditions, conditions_string=conditions_string)
+def create_csv(conditions, file_name):
+    # conditions_string = "race_bango > '10'"
+    # service = EntryHorsesService(conditions=conditions, conditions_string=conditions_string)
+    service = EntryHorsesService(conditions=conditions)
 
     df = service.entry_horses
     utils.output.show_one_line(df)
@@ -50,31 +46,39 @@ def group_by_bataiju(file_name):
     sorted_df = df.sort_values(by=["race_bango", "bataiju"])
     print(sorted_df)
 
-def read_from_spleadsheet():
-    from google.colab import auth
-    from google.auth import default
-    import gspread
-
-    import pandas as pd
-
-    auth.authenticate_user()
-    creds, _ = default()
-    gc = gspread.authorize(creds)
-
-    key = "1hO41YOQzjOnIr0VKuDK39FVs2yKOjVjQzPjc2WdeETI"
-    workbook = gc.open_by_key(key)
-    worksheet = workbook.worksheet("2019-12-22_nakayama_11-12R")
-    data = worksheet.get_all_values()
-    # 一行目に不要な行が入っている時  #data .pop(0)
-
-    _df = pd.DataFrame(data, columns=data[0])
-    df = _df.drop(_df.index[0])
-    print(df)
+# def read_from_spleadsheet():
+#     from google.colab import auth
+#     from google.auth import default
+#     import gspread
+#
+#     import pandas as pd
+#
+#     auth.authenticate_user()
+#     creds, _ = default()
+#     gc = gspread.authorize(creds)
+#
+#     key = "1hO41YOQzjOnIr0VKuDK39FVs2yKOjVjQzPjc2WdeETI"
+#     workbook = gc.open_by_key(key)
+#     worksheet = workbook.worksheet("2019-12-22_nakayama_11-12R")
+#     data = worksheet.get_all_values()
+#     # 一行目に不要な行が入っている時  #data .pop(0)
+#
+#     _df = pd.DataFrame(data, columns=data[0])
+#     df = _df.drop(_df.index[0])
+#     print(df)
 
 def main():
+    conditions = {
+        "kaisai_nen": "2019",
+        "kaisai_tsukihi": "1222",
+        "keibajo_code": "06",
+        "race_bango": "11"
+    }
+
     file_name = "entry_horses_service_client.csv"
-    create_csv(file_name)
-    group_by_bataiju(file_name)
+    file_name = "2019-12-22_nakayama_11R.csv"
+    create_csv(conditions, file_name)
+    # group_by_bataiju(file_name)
 
 if __name__ == '__main__':
     main()
