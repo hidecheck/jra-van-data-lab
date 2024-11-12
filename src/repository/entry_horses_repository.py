@@ -3,7 +3,8 @@ from typing import Optional
 from pandas import Series
 
 import utils.output
-from const import table_name, table_columns
+from const import table_name
+from const.table_columns import jvd_ra
 from repository.base_repository import BaseRepository
 
 
@@ -18,7 +19,7 @@ class EntryHorsesRepository(BaseRepository):
     def __init__(self):
         super().__init__()
         self.table = table_name.ENTRY_HORSE
-        self.default_projection = ", ".join(table_columns.ENTRY_HORSE_PROJECTIONS)
+        self.default_projection = ", ".join(entry_horse_columns.ENTRY_HORSE_PROJECTIONS)
 
     def find_by_race(self, race: Series, order: Optional[str] = None, desc: bool = None):
         conditions = {

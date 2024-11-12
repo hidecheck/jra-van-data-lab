@@ -6,6 +6,7 @@ import utils.output
 from repository.entry_horses_repository import EntryHorsesRepository
 from repository.payoff_repository import PayoffRepository
 from repository.race_repository import RaceRepository
+from service.race_service import RaceService
 
 
 class HorseRacingService:
@@ -73,10 +74,11 @@ class HorseRacingService:
         -------
 
         """
-        year = series["kaisai_nen"]
-        month = series["kaisai_tsukihi"][:2]
-        day = series["kaisai_tsukihi"][2:4]
-        return f"{year}-{month}-{day}_{series['keibajo_code']}_{series['race_bango']}"
+        return RaceService.to_race_id(series)
+        # year = series["kaisai_nen"]
+        # month = series["kaisai_tsukihi"][:2]
+        # day = series["kaisai_tsukihi"][2:4]
+        # return f"{year}-{month}-{day}_{series['keibajo_code']}_{series['race_bango']}"
 
 
 if __name__ == "__main__":
