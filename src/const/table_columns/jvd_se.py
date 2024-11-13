@@ -1,4 +1,14 @@
-ENTRY_HORSE_ALL_COLUMNS = [
+"""
+JRA_VAN 仕様:
+  Table No: 3
+  Table ID: jvd_se
+  名称: 馬毎レース情報
+
+本システム 仕様:
+  名称: entry_hourse
+"""
+
+ALL_COLUMNS = [
     "record_id",    # 除外
     "data_kubun",
     "data_sakusei_nengappi",   # 除外
