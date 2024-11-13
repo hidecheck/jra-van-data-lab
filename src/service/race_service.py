@@ -1,8 +1,10 @@
 from typing import Dict, Optional, List
-
+import pandas as pd
 from pandas import DataFrame, Series
 
 import utils.output
+from const import master_code
+from const.table_columns import jvd_ra
 from repository.entry_horses_repository import EntryHorsesRepository
 from repository.payoff_repository import PayoffRepository
 from repository.race_repository import RaceRepository
@@ -31,9 +33,15 @@ class RaceService:
             self.races = self.race_repository.find_with_conditions_string(conditions, conditions_string, order, desc)
         print(f"## 総レース件数: {len(self.races)}")
 
-        # レースID 追加
-        self.races["race_id"] = self.races.apply(self.to_race_id, axis=1)
-
+        # レースID
+        self.races[jvd_ra.CUSTOM_COL_RACE_ID] = self.races.apply(self.to_race_id, axis=1)
+        # グレード
+        self.races[jvd_ra.CUSTOM_COL_RACE_GRADE] = self.races.apply(self.to_race_grade, axis=1)
+        # 競走名本題 空白除去
+        self.races["kyosomei_hondai"] = self.races["kyosomei_hondai"].apply(lambda x: x.strip())
+        # self.races["kyosomei_hondai"] = self.races["kyosomei_hondai"].str.strip()
+        # トラック名称
+        self.races[jvd_ra.CUSTOM_COL_TRACK_NAME] = self.races["track_code"].apply(lambda x: master_code.TRACK_CODE.get(x))
 
     @staticmethod
     def to_race_id(series: Series):
@@ -61,13 +69,14 @@ class RaceService:
         day = series["kaisai_tsukihi"][2:4]
         return f"{year}-{month}-{day}_{series['keibajo_code']}_{series['race_bango']}"
 
-    def to_race_name(self):
-        # TODO
-        pass
+    @staticmethod
+    def to_race_grade(row: Series):
+        if row["kyoso_joken_code"] != "999":
+            race_grade = master_code.RACE_CONDITION.get(row["kyoso_joken_code"])
+        else:
+            race_grade = master_code.GRADE_CODE.get(row["grade_code"])
 
-    def to_race_grade(self):
-        # TODO
-        pass
+        return race_grade
 
 
 if __name__ == '__main__':
@@ -78,7 +87,7 @@ if __name__ == '__main__':
             "kaisai_nen": "2020",
             "kaisai_tsukihi": "1227",
             "keibajo_code": "06",
-            "race_bango": "11"
+            "race_bango": "01"
         }
         service = RaceService(race_repository=repository, conditions=conditions)
         print(len(service.races))

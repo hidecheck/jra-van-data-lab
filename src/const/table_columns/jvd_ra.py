@@ -8,6 +8,10 @@ JRA_VAN 仕様:
   名称: race
 """
 
+CUSTOM_COL_RACE_ID = "_race_id"
+CUSTOM_COL_RACE_GRADE = "_race_grade"
+CUSTOM_COL_TRACK_NAME = "_track_name"
+
 ALL_COLUMNS = [
     "record_id",
     "data_kubun",
@@ -75,8 +79,8 @@ ALL_COLUMNS = [
 
 # fmt: off
 TYPICAL_COLUMNS = [
-    "race_id",            # [APPEND] レースID: YYYY-mm-dd_<競馬場コード>_<レースNo>
-    "race_name",          # [APPEND] レース名
+    CUSTOM_COL_RACE_ID,     # [APPEND] レースID: YYYY-mm-dd_<競馬場コード>_<レースNo>
+    CUSTOM_COL_RACE_GRADE,  # [APPEND] グレード or 競争条件名称
     "kaisai_nen",
     "kaisai_tsukihi",
     "keibajo_code",
@@ -91,10 +95,10 @@ TYPICAL_COLUMNS = [
     "kyoso_shubetsu_code",  # <コード表 2005.競走種別コード>参照
     "kyoso_kigo_code",      # <コード表 2006.競走記号コード>参照 例) 牝, 混合）,（国際）
     "juryo_shubetsu_code",  # <コード表 2008.重量種別コード>参照
-    "kyoso_joken_code_2sai",      # 2歳馬の競走条件   <コード表 2007.競走条件コード>参照
-    "kyoso_joken_code_3sai",      # 3歳馬の競走条件   <コード表 2007.競走条件コード>参照
-    "kyoso_joken_code_4sai",      # 4歳馬の競走条件   <コード表 2007.競走条件コード>参照
-    "kyoso_joken_code_5sai_ijo",  # 5歳以上馬の競走条件   <コード表 2007.競走条件コード>参照
+    # "kyoso_joken_code_2sai",      # 2歳馬の競走条件   <コード表 2007.競走条件コード>参照
+    # "kyoso_joken_code_3sai",      # 3歳馬の競走条件   <コード表 2007.競走条件コード>参照
+    # "kyoso_joken_code_4sai",      # 4歳馬の競走条件   <コード表 2007.競走条件コード>参照
+    # "kyoso_joken_code_5sai_ijo",  # 5歳以上馬の競走条件   <コード表 2007.競走条件コード>参照
     "kyoso_joken_code",           # 出走可能な最も馬齢が若い馬に対する条件   <コード表 2007.競走条件コード>参照
     "kyori",
     "track_code",                 # <コード表 2009.トラックコード>参照 例) 芝・左, ダート・右
@@ -112,14 +116,14 @@ TYPICAL_COLUMNS = [
 ]
 
 MINIMUM_COLUMNS = [
-    "race_id",            # [APPEND] レースID: YYYY-mm-dd_<競馬場コード>_<レースNo>
-    "race_name",          # [APPEND] レース名
-    "race_grade",         # [APPEND] 条件、グレードなど
+    CUSTOM_COL_RACE_ID,     # [APPEND] レースID: YYYY-mm-dd_<競馬場コード>_<レースNo>
     "race_bango",
     "kyosomei_hondai",
-    "jusho_kaiji",        # 第 N 回
+    "jusho_kaiji",          # 第 N 回
+    CUSTOM_COL_RACE_GRADE,  # [APPEND] グレード or 競争条件名称
     "kyori",
-    "track_code",         # <コード表 2009.トラックコード>参照 例) 芝・左, ダート・右
+    CUSTOM_COL_TRACK_NAME,  # [APPEND] トラック名称 例) 芝・左, ダート・右
+    "track_code",           # <コード表 2009.トラックコード>参照 例) 芝・左, ダート・右
     "toroku_tosu",
 ]
 # fmt: on
