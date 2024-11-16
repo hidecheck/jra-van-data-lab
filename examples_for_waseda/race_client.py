@@ -7,14 +7,13 @@ from utils import output
 
 
 def main():
-    repository = RaceRepository()
     conditions = {
         "kaisai_nen": "2019",
         "kaisai_tsukihi": "1222",
         "keibajo_code": "06",
         # "race_bango": "11",
     }
-    service = RaceService(race_repository=repository, conditions=conditions)
+    service = RaceService(conditions=conditions)
 
     print(len(service.races))
     output.show_line(service.races, 0, False)

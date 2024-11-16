@@ -10,6 +10,9 @@ from utils import output
 
 
 class RaceService:
+    """
+    レース詳細情報サービス
+    """
     def __init__(
         self,
         repository:Optional[RaceRepository] = None,
@@ -26,13 +29,13 @@ class RaceService:
         # 指定した条件にマッチする全レース情報
         self.races: Optional[DataFrame] = None
 
-        self.initialize(conditions, conditions_string, order, desc)
+        self._set_races(conditions, conditions_string, order, desc)
 
-    def initialize(self, conditions, conditions_string: str = None, order: str = None, desc: bool = False):
+    def _set_races(self, conditions, conditions_string: str = None, order: str = None, desc: bool = False):
         if not conditions_string:
-            self.races = self.race_repository.find(conditions, order, desc)
+            self.races = self.repository.find(conditions, order, desc)
         else:
-            self.races = self.race_repository.find_with_conditions_string(conditions, conditions_string, order, desc)
+            self.races = self.repository.find_with_conditions_string(conditions, conditions_string, order, desc)
         print(f"## 総レース件数: {len(self.races)}")
 
         # レースID
@@ -84,14 +87,13 @@ class RaceService:
 if __name__ == '__main__':
 
     def main():
-        repository = RaceRepository()
         conditions = {
             "kaisai_nen": "2020",
             "kaisai_tsukihi": "1227",
             "keibajo_code": "06",
             "race_bango": "01"
         }
-        service = RaceService(race_repository=repository, conditions=conditions)
+        service = RaceService(conditions=conditions)
         print(len(service.races))
 
         output.show_one_line(service.races, True)
