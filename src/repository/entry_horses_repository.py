@@ -4,7 +4,7 @@ from pandas import Series
 
 import utils.output
 from const import table_name
-from const.table_columns import jvd_ra
+from const.table_columns import jvd_se
 from repository.base_repository import BaseRepository
 
 
@@ -19,7 +19,7 @@ class EntryHorsesRepository(BaseRepository):
     def __init__(self):
         super().__init__()
         self.table = table_name.ENTRY_HORSE
-        self.default_projection = ", ".join(entry_horse_columns.ENTRY_HORSE_PROJECTIONS)
+        self.default_projection = ", ".join(jvd_se.ENTRY_HORSE_PROJECTIONS)
 
     def find_by_race(self, race: Series, order: Optional[str] = None, desc: bool = None):
         conditions = {
@@ -81,6 +81,7 @@ if __name__ == '__main__':
         conditions_string = "race_bango > '10'"
 
         repository = EntryHorsesRepository()
+        # df = repository.find_with_conditions_string()
         df = repository.find_with_conditions_string(conditions=conditions, conditions_string=conditions_string)
         utils.output.show_one_line(df)
         for index, row in df.iterrows():
