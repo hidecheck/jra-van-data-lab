@@ -38,18 +38,20 @@ class RaceService:
             self.races = self.repository.find_with_conditions_string(conditions, conditions_string, order, desc)
         print(f"## 総レース件数: {len(self.races)}")
 
+        # 競走名本題 空白除去
+        self.races["kyosomei_hondai"] = self.races["kyosomei_hondai"].apply(lambda x: x.strip())
+        # self.races["kyosomei_hondai"] = self.races["kyosomei_hondai"].str.strip()
+
+        # 列追加
         # レースID
         self.races[jvd_ra.CUSTOM_COL_RACE_ID] = self.races.apply(self.to_race_id, axis=1)
         # グレード
         self.races[jvd_ra.CUSTOM_COL_RACE_GRADE] = self.races.apply(self.to_race_grade, axis=1)
-        # 競走名本題 空白除去
-        self.races["kyosomei_hondai"] = self.races["kyosomei_hondai"].apply(lambda x: x.strip())
-        # self.races["kyosomei_hondai"] = self.races["kyosomei_hondai"].str.strip()
         # トラック名称
         self.races[jvd_ra.CUSTOM_COL_TRACK_NAME] = self.races["track_code"].apply(lambda x: master_code.TRACK_CODE.get(x))
 
     @staticmethod
-    def to_race_id(series: Series):
+    def to_race_id(row: Series):
         """
         レースIDを返す。
         レースID: YYYY-mm-dd_<競馬場コード>_<レースNo>
@@ -61,7 +63,7 @@ class RaceService:
 
         Parameters
         ----------
-        series: Series
+        row: Series
           require keys: `kaisai_nen`, `kaisai_tsukihi`, `keibajo_code`, `race_bango`
           PAYOFF, RACE から取得したデータにはこれらの key が含まれる
 
@@ -69,10 +71,10 @@ class RaceService:
         -------
 
         """
-        year = series["kaisai_nen"]
-        month = series["kaisai_tsukihi"][:2]
-        day = series["kaisai_tsukihi"][2:4]
-        return f"{year}-{month}-{day}_{series['keibajo_code']}_{series['race_bango']}"
+        year = row["kaisai_nen"]
+        month = row["kaisai_tsukihi"][:2]
+        day = row["kaisai_tsukihi"][2:4]
+        return f"{year}-{month}-{day}_{row['keibajo_code']}_{row['race_bango']}"
 
     @staticmethod
     def to_race_grade(row: Series):

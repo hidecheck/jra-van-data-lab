@@ -7,6 +7,13 @@ JRA_VAN 仕様:
 本システム 仕様:
   名称: entry_hourse
 """
+from const.table_columns import jvd_ra
+from const.table_columns.jvd_ra import CUSTOM_COL_RACE_ID, CUSTOM_COL_RACE_GRADE
+
+CUSTOM_COL_WEIGHT_DIFFERENCE = "_weight_diff"
+CUSTOM_COL_WIN_BET = "_win_bet" # 単勝 (float)
+CUSTOM_COL_WIN_FAVORITE = "_win_fav" # 単勝人気 (int)
+CUSTOM_COL_GENDER = "_gender"
 
 ALL_COLUMNS = [
     "record_id",    # 除外
@@ -79,6 +86,22 @@ ALL_COLUMNS = [
     "yoso_gosa_minus",
     "yoso_juni",
     "kyakushitsu_hantei",
+]
+
+MINIMUM_COLUMNS = [
+    CUSTOM_COL_RACE_ID,     # [APPEND] レースID: YYYY-mm-dd_<競馬場コード>_<レースNo>
+    "race_bango",
+    "wakuban",
+    "umaban",
+    "bamei",
+    CUSTOM_COL_GENDER,
+    "barei",
+    "kishumei_ryakusho",
+    "bataiju",
+    CUSTOM_COL_WEIGHT_DIFFERENCE,   # 符号付き馬体重（文字列）
+    "kakutei_chakujun",
+    CUSTOM_COL_WIN_BET,
+    CUSTOM_COL_WIN_FAVORITE,
 ]
 
 ENTRY_HORSE_PROJECTIONS = [

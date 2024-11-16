@@ -1,14 +1,20 @@
 import datetime
 from typing import List, Tuple, Optional, Dict
 
+import pandas as pd
 from pandas import DataFrame, Series
 
+import utils.output
+from const import master_code
+from const.table_columns.jvd_ra import CUSTOM_COL_RACE_ID
+from const.table_columns.jvd_se import CUSTOM_COL_GENDER, CUSTOM_COL_WEIGHT_DIFFERENCE, CUSTOM_COL_WIN_FAVORITE
 from repository.entry_horses_repository import EntryHorsesRepository
+from service.race_service import RaceService
 
 
 class EntryHorsesService:
     """
-    指定したレースの出走馬情報を操作する
+    馬毎情報を操作クラス
     """
 
     def __init__(
@@ -25,17 +31,77 @@ class EntryHorsesService:
             self.repository: EntryHorsesRepository = repository
         else:
             self.repository: EntryHorsesRepository = EntryHorsesRepository()
-        self.set_entry_horses(conditions=conditions, conditions_string=conditions_string)
+        self._set_entry_horses(conditions=conditions, conditions_string=conditions_string, order=order, desc=desc)
 
-    def set_entry_horses(self, conditions, conditions_string):
+    def _set_entry_horses(self, conditions, conditions_string, order, desc):
         if conditions_string:
             self.entry_horses = self.repository.find_with_conditions_string(
                 conditions=conditions,
-                conditions_string=conditions_string)
+                conditions_string=conditions_string,
+                order=order,
+                desc=desc)
         else:
-            self.entry_horses = self.repository.find(conditions=conditions)
+            self.entry_horses = self.repository.find(conditions=conditions, order=order, desc=desc)
+
+        # 馬名 空白除去
+        self.entry_horses["bamei"] = self.entry_horses["bamei"].apply(lambda x: x.strip())
+
+        # 列追加
+        # レースID
+        self.entry_horses[CUSTOM_COL_RACE_ID] = self.entry_horses.apply(RaceService.to_race_id, axis=1)
+        # 性別
+        self.entry_horses[CUSTOM_COL_GENDER] = self.entry_horses["seibetsu_code"].apply(lambda x: master_code.GENDER_CODE.get(x))
+        # 馬体重増減
+        self.entry_horses[CUSTOM_COL_WEIGHT_DIFFERENCE] = self.entry_horses.apply(self.to_weight_difference, axis=1)
+        # 単勝オッズ
+        self.entry_horses[CUSTOM_COL_GENDER] = self.entry_horses["tansho_odds"].apply(self.to_win_bet)
+        # 単勝人気
+        self.entry_horses[CUSTOM_COL_WIN_FAVORITE] = self.entry_horses["tansho_ninkijun"].astype(int)
+
+
+    @staticmethod
+    def to_weight_difference(row: Series):
+        zogen_fugo = row["zogen_fugo"]
+        zogen_sa = row["zogen_sa"].lstrip('0')
+
+        if pd.isna(zogen_fugo):
+            zogen_fugo = "+"
+
+        return f"{zogen_fugo}{zogen_sa}"
+
+    @staticmethod
+    def to_win_bet(tansho_odds):
+        """
+        4桁の数字の文字列に3桁目の後に小数点を追加して数値に変換する関数
+
+        Args:
+        tansho_odds: 単勝オッズ, 4桁の数字の文字列
+
+        Returns:
+        float: 変換後の数値
+        """
+
+        integer_part = tansho_odds[:3]
+        decimal_part = tansho_odds[3:]
+        result = float(integer_part + "." + decimal_part)
+        return result
+
 
     def get_entry_horse_by_ketto_toroku_bango(self, ketto_toroku_bango: str) -> Series:
+        """
+        登録番号を指定して出走情報を取得する
+
+        Parameters
+        ----------
+        key: 検索キー
+          血統登録番号, 馬名, 馬番など
+        value: 検索バリュー
+          血統登録番号, 馬名, 馬番などの値
+
+        Returns
+        -------
+
+        """
 
         return self.get_entry_horse(key="ketto_toroku_bango", value=ketto_toroku_bango)
 
@@ -130,9 +196,13 @@ if __name__ == '__main__':
             "race_bango": "11"
         }
 
-        repository = EntryHorsesRepository()
-        service = EntryHorsesService(repository, conditions)
+        # repository = EntryHorsesRepository()
+        # service = EntryHorsesService(repository, conditions)
+        service = EntryHorsesService(conditions=conditions)
         df = service.entry_horses
+        utils.output.show_one_line(df)
+
+        print("-----------------")
         s = df.iloc[0]
         ketto_toroku_bango = s["ketto_toroku_bango"]
         current_entry_horse = service.get_entry_horse(key="ketto_toroku_bango", value=ketto_toroku_bango)
