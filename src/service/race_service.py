@@ -5,8 +5,6 @@ from pandas import DataFrame, Series
 import utils.output
 from const import master_code
 from const.table_columns import jvd_ra
-from repository.entry_horses_repository import EntryHorsesRepository
-from repository.payoff_repository import PayoffRepository
 from repository.race_repository import RaceRepository
 from utils import output
 
@@ -14,13 +12,17 @@ from utils import output
 class RaceService:
     def __init__(
         self,
-        race_repository: RaceRepository,
-        conditions: Dict,
+        repository:Optional[RaceRepository] = None,
+        conditions: Optional[Dict] = None,
         conditions_string: str = None,
         order=None,
         desc=False,
     ):
-        self.race_repository: RaceRepository = race_repository
+        if repository:
+            self.repository: RaceRepository = repository
+        else:
+            self.repository: RaceRepository = RaceRepository()
+
         # 指定した条件にマッチする全レース情報
         self.races: Optional[DataFrame] = None
 
