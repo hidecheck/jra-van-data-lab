@@ -7,7 +7,8 @@ from pandas import DataFrame, Series
 import utils.output
 from const import master_code
 from const.table_columns.jvd_ra import CUSTOM_COL_RACE_ID
-from const.table_columns.jvd_se import CUSTOM_COL_GENDER, CUSTOM_COL_WEIGHT_DIFFERENCE, CUSTOM_COL_WIN_FAVORITE
+from const.table_columns.jvd_se import CUSTOM_COL_GENDER, CUSTOM_COL_WEIGHT_DIFFERENCE, CUSTOM_COL_WIN_FAVORITE, \
+    CUSTOM_COL_WIN_BET, CUSTOM_COL_JOCKEY
 from repository.entry_horses_repository import EntryHorsesRepository
 from service.race_service import RaceService
 
@@ -54,13 +55,28 @@ class EntryHorsesService:
         # 馬体重増減
         self.entry_horses[CUSTOM_COL_WEIGHT_DIFFERENCE] = self.entry_horses.apply(self.to_weight_difference, axis=1)
         # 単勝オッズ
-        self.entry_horses[CUSTOM_COL_GENDER] = self.entry_horses["tansho_odds"].apply(self.to_win_bet)
+        self.entry_horses[CUSTOM_COL_WIN_BET] = self.entry_horses["tansho_odds"].apply(self.to_win_bet)
         # 単勝人気
         self.entry_horses[CUSTOM_COL_WIN_FAVORITE] = self.entry_horses["tansho_ninkijun"].astype(int)
+        # 騎手名 空白除去
+        self.entry_horses[CUSTOM_COL_JOCKEY] = self.entry_horses["kishumei_ryakusho"].apply(lambda x: x.strip())
 
 
     @staticmethod
     def to_weight_difference(row: Series):
+        if row["zogen_sa"] == "000":
+            # 増減差なし
+            return "0"
+
+        if row["zogen_sa"].strip() == "":
+            # 初出走 or 出走取消
+            return "999"
+
+        if pd.isna(row["zogen_sa"]) or row["zogen_sa"] == "999":
+            # 計量不能
+            return "999"
+            # return row["zogen_sa"]
+
         zogen_fugo = row["zogen_fugo"]
         zogen_sa = row["zogen_sa"].lstrip('0')
 

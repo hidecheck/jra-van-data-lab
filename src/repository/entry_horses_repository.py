@@ -83,7 +83,8 @@ if __name__ == '__main__':
         repository = EntryHorsesRepository()
         # df = repository.find_with_conditions_string()
         df = repository.find_with_conditions_string(conditions=conditions, conditions_string=conditions_string)
-        utils.output.show_one_line(df, sort_index=False)
+        # utils.output.show_one_line(df, sort_index=False)
+        utils.output.show_one_line(df)
         for index, row in df.iterrows():
             print(row["race_bango"], row["umaban"], row["bamei"], row["bataiju"], row["tansho_ninkijun"], row["tansho_odds"])
 

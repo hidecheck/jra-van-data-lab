@@ -14,6 +14,7 @@ CUSTOM_COL_WEIGHT_DIFFERENCE = "_weight_diff"
 CUSTOM_COL_WIN_BET = "_win_bet" # 単勝 (float)
 CUSTOM_COL_WIN_FAVORITE = "_win_fav" # 単勝人気 (int)
 CUSTOM_COL_GENDER = "_gender"
+CUSTOM_COL_JOCKEY = "_jockey"
 
 ALL_COLUMNS = [
     "record_id",    # 除外
@@ -96,7 +97,7 @@ MINIMUM_COLUMNS = [
     "bamei",
     CUSTOM_COL_GENDER,
     "barei",
-    "kishumei_ryakusho",
+    CUSTOM_COL_JOCKEY,     # [APPEND] 騎手略称のスペース除去
     "bataiju",
     CUSTOM_COL_WEIGHT_DIFFERENCE,   # 符号付き馬体重（文字列）
     "kakutei_chakujun",
